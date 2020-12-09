@@ -1,12 +1,22 @@
 import pandas as pd
 import numpy
 class DataHandler:
+    """
+        Getting data from bucket
+    """
     def __init__(self):
+        """
+            Initialising the 3 datasets :
+            entry 1
+            entry 2
+            result
+        """
         print("intialisation")
         self.df_lf = None
         self.df_pa = None
         self.df_res = None
         print("intialisation done")
+
     def get_data(self):
         print("loading data from bucket")
         self.df_lf = pd.read_csv("https://storage.googleapis.com/h3-data/listings_final.csv",sep=';')
@@ -21,3 +31,4 @@ class DataHandler:
     def get_process_data(self):
         self.get_data()
         self.group_data()
+        print("end of processing")
