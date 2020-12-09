@@ -32,3 +32,26 @@ class DataHandler:
         self.get_data()
         self.group_data()
         print("end of processing")
+
+class FeatureRecipe:
+
+    def __init__(self,df:pd.DataFrame):
+        self.df = df
+        self.cate = None
+        self.floa = None
+        self.intt = None
+        pass
+
+    def separate_variable_types(self) -> None:
+        #return cate,floa,intt
+        pass
+    def drop_na_prct(self,threshold: float):
+        pass
+    def drop_useless_features(self):
+        pass
+    def drop_duplicate(self):
+        pass
+#   def deal_date_time(self):
+#        pass
+    def get_process_data(self,threshold:float):
+        pass
