@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy
+import numpy as np
 class DataHandler:
     """
         Getting data from bucket
@@ -11,7 +11,7 @@ class DataHandler:
             entry 2
             result
         """
-        print("DataHandler intialisation")
+        print("DataHandlerintialisation")
         self.df_lf = None
         self.df_pa = None
         self.df_res = None
@@ -31,7 +31,7 @@ class DataHandler:
     def get_process_data(self):
         self.get_data()
         self.group_data()
-        print("end of processing")
+        print("end of processing\n")
 
 class FeatureRecipe:
 
@@ -83,9 +83,23 @@ class FeatureRecipe:
         # comparer les colonnes et voir si elles sont dupliquées
         print("dropping duplicated rows")
         self.df.drop_duplicates(inplace=True)
+        duplicates = self.get_duplicates()
+        for col in duplicates:
+            self.df.drop(col)
         print("duplicated rows dropped")
 
-    #def deal_date_time(self):
+    def get_duplicates(self):
+        duplicates = []
+        #for col in self.df.columns:
+            #for scol in self.df.columns:
+        for col in range(self.df.shape[1]-1):
+            for scol in range(col+1,self.df.shape[1]-1):
+                print("{} {}".format(col,scol))
+                if sum( np.where(self.df.iloc[:,[col]] == self.df.iloc[:,[scol]],0,1) ) == 0:
+                    duplicates.append(scol)
+        return duplicates
+
+    # def deal_date_time(self):
     #   pass
 
     def get_process_data(self,threshold : float):
@@ -93,7 +107,7 @@ class FeatureRecipe:
         self.drop_na_prct(threshold)
         self.drop_duplicate()
         self.separate_variable_types()
-        print("end of FeatureRecipe processing")
+        print("end of FeatureRecipe processing\n")
 
 import sklearn as skn
 import matplotlib as plt
@@ -103,7 +117,7 @@ class FeatureExtractor:
     """
     Feature Extractor class
     """
-    def __init__(self, data: pd.DataFrame[], flist: list):
+    def __init__(self, data: pd.DataFrame, flist: list):
         """
             Input : pandas.DataFrame, feature list to drop
             Output : X_train, X_test, y_train, y_test according to sklearn.model_selection.train_test_split
@@ -111,5 +125,5 @@ class FeatureExtractor:
         self.X_train, self.X_test, self.y_train, self.y_test = None,None,None,None
         self.df = data
         self.flist = flist
-    def splitting(size:float,rng:int,X pd.DataFrame[]):
+    def splitting(size:float,rng:int,X pd.Series):
         self.X_train, self.X_test, self.y_train, self.y_test train_test_split(X, y, size, rng)
