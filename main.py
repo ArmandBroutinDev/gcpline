@@ -11,7 +11,7 @@ class DataHandler:
             entry 2
             result
         """
-        print("intialisation")
+        print("DataHandler intialisation")
         self.df_lf = None
         self.df_pa = None
         self.df_res = None
@@ -45,6 +45,7 @@ class FeatureRecipe:
         print("end of intialisation")
 
     def separate_variable_types(self) -> None:
+        print("separating columns")
         for col in self.df.columns:
             if self.df[col].dtypes == int:
                 self.intt.append(self.df[col])
@@ -53,6 +54,7 @@ class FeatureRecipe:
             else:
                 self.cate.append(self.df[col])
         print ("dataset column size : {} \nnumber of discreet values : {} \nnumber of continuous values : {} \nnumber of others : {} \ntaille total : {}".format(len(self.df.columns),len(self.intt),len(self.floa),len(self.cate),len(self.intt)+len(self.floa)+len(self.cate) ))
+
     def drop_na_prct(self,threshold : float):
         """
             on appelle la commande et on met un threshold entre 1 et 0 en flottant
@@ -63,7 +65,7 @@ class FeatureRecipe:
         print("dropping columns with {} percentage ".format(threshold))
         for col in self.df.columns:
             if self.df[col].isna().sum()/self.df.shape[0] >= threshold:
-                self.dropped.append( self.df.drop([col], axis='columns', inplace=True) )
+                self.drop.append( self.df.drop([col], axis='columns', inplace=True) )
                 dropped+=1
         print("dropped {} columns".format(dropped))
 
@@ -79,14 +81,35 @@ class FeatureRecipe:
 
     def drop_duplicate(self):
         # comparer les colonnes et voir si elles sont dupliquées
-        for col in self.df:
-            if col.duplicated().sum()
+        print("dropping duplicated rows")
+        self.df.drop_duplicates(inplace=True)
+        print("duplicated rows dropped")
 
-#   def deal_date_time(self):
-#        pass
+    #def deal_date_time(self):
+    #   pass
+
     def get_process_data(self,threshold : float):
-        self.separate_variable_types()
-        self.drop_na_prct(threshold)
         self.drop_useless_features()
+        self.drop_na_prct(threshold)
         self.drop_duplicate()
+        self.separate_variable_types()
         print("end of FeatureRecipe processing")
+
+import sklearn as skn
+import matplotlib as plt
+from sklearn.model_selection import train_test_split
+
+class FeatureExtractor:
+    """
+    Feature Extractor class
+    """
+    def __init__(self, data: pd.DataFrame[], flist: list):
+        """
+            Input : pandas.DataFrame, feature list to drop
+            Output : X_train, X_test, y_train, y_test according to sklearn.model_selection.train_test_split
+        """
+        self.X_train, self.X_test, self.y_train, self.y_test = None,None,None,None
+        self.df = data
+        self.flist = flist
+    def splitting(size:float,rng:int,X pd.DataFrame[]):
+        self.X_train, self.X_test, self.y_train, self.y_test train_test_split(X, y, size, rng)
