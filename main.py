@@ -119,15 +119,43 @@ class FeatureExtractor:
             Input : pandas.DataFrame, feature list to drop
             Output : X_train, X_test, y_train, y_test according to sklearn.model_selection.train_test_split
         """
+        print("FeatureExtractor intialisation")
         self.X_train, self.X_test, self.y_train, self.y_test = None,None,None,None
         self.df = data
         self.flist = flist
+        print("intialisation done")
 
+    def extractor(self):
+        print("extracting unwanted columns")
+        for col in self.flist:
+            if col in self.df:
+                self.df.drop(col, axis=1, inplace=True)
+        print("done extracting unwanted columns")
 
-    def outing_list(self):
-        # on selectionne les colonnes dont on a pas besoin
-        pass
+    def splitting(self, size:float,rng:int, y:str):
+        print("splitting dataset for train and test")
+        x = self.df.loc[:,self.df.columns != y]
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(x, self.df[y], test_size=size, random_state=rng)
+        print("splitting done")
 
-    def splitting(size:float,rng:int,X:pd.Series, y:pd.Series):
-        self.X_train, self.X_test, self.y_train, self.y_test train_test_split(X, y, size, rng)
+    def get_process_data(self):
+        self.extractor()
+        self.splitting(0.3,42,'local_price')
+        print("done processing Feature Extractor")
+        return self.X_train, self.X_test, self.y_train, self.y_test
 
+class ModelBuilder:
+    """
+        Class for train and print results of ml model 
+    """    def __init__(self, model_path: str = None, save: bool = None):
+        pass    def __repr__(self):
+        pass    def predict_test(self, X) -> np.ndarray:
+        pass    def predict_from_dump(self, X) -> np.ndarray:
+        pass    def save_model(self, path:str):
+        #with the format : 'model_{}_{}'.format(date)
+        pass    def load_model(self):
+        try:
+            #load model
+            pass
+        except:
+            pass
