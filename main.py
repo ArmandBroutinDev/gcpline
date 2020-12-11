@@ -85,22 +85,19 @@ class FeatureRecipe:
         self.df.drop_duplicates(inplace=True)
         duplicates = self.get_duplicates()
         for col in duplicates:
-            self.df.drop(col)
+            print("dropping column :{}".format(col))
+            self.df.drop([col], axis='columns', inplace=True)
         print("duplicated rows dropped")
 
     def get_duplicates(self):
         duplicates = []
         #for col in self.df.columns:
             #for scol in self.df.columns:
-        for col in range(self.df.shape[1]-1):
-            for scol in range(col+1,self.df.shape[1]-1):
-                print("{} {}".format(col,scol))
-                if sum( np.where(self.df.iloc[:,[col]] == self.df.iloc[:,[scol]],0,1) ) == 0:
-                    duplicates.append(scol)
+        for col in range(self.df.shape[1]):
+            for scol in range(col+1,self.df.shape[1]):
+                if self.df.iloc[:,col].equals(self.df.iloc[:,scol]):
+                    duplicates.append(self.df.iloc[:,scol].name)
         return duplicates
-
-    # def deal_date_time(self):
-    #   pass
 
     def get_process_data(self,threshold : float):
         self.drop_useless_features()
@@ -125,5 +122,12 @@ class FeatureExtractor:
         self.X_train, self.X_test, self.y_train, self.y_test = None,None,None,None
         self.df = data
         self.flist = flist
-    def splitting(size:float,rng:int,X pd.Series):
+
+
+    def outing_list(self):
+        # on selectionne les colonnes dont on a pas besoin
+        pass
+
+    def splitting(size:float,rng:int,X:pd.Series, y:pd.Series):
         self.X_train, self.X_test, self.y_train, self.y_test train_test_split(X, y, size, rng)
+
